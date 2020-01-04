@@ -10,10 +10,14 @@ type Props = IProps & RouteComponentProps;
 
 function PetList({ history }: Props) {
   useEffect(() => {
-    console.log('PetList');
-  }, []);
+    if (!localStorage.getItem('tokenAdopets')) {
+      console.log('You are not logged in');
+      history.push('/');
+    }
+  }, []); // eslint-disable-line
 
   function logout() {
+    localStorage.removeItem('tokenAdopets');
     history.push('/');
   }
 
