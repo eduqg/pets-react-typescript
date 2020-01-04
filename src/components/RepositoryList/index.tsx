@@ -29,7 +29,7 @@ type Props = StateProps & DispatchProps & OwnProps;
 
 function RepositoryList({ repositories, loadRequest }: Props) {
   useEffect(() => {
-    loadRequest();
+    // loadRequest();
   }, [loadRequest]);
 
   return (
