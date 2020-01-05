@@ -7,8 +7,10 @@ import {
 import ControlPagination from '../ControlPagination';
 
 import logo from '../../assets/pet.png';
+import goodboy from '../../assets/goodboy.png';
 import {
-  CustomContent, CustomSider, CustomFooter, Loading, PetCard, PetItem, SiderImage, ButtonsTop,
+  CustomContent, CustomSider, CustomFooter, Loading, SiderImage, ButtonsTop,
+  PetList, Card, CardHeader, CardImage, CardMiddle, PetName, PetPrice, CardBottom, PetSubitem,
 } from './styles';
 
 import api from '../../services/api';
@@ -117,11 +119,44 @@ export default function Pets({ history, petlist }: Props) {
           <Loading src={logo} loading={loading ? 'infinite' : '0'} />
 
           <ButtonsTop>
-            {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button> }
-            {male === 'MALE' ? <Button type="primary" onClick={() => setMale('FEMALE')}>Select Female</Button> : <Button type="danger" onClick={() => setMale('MALE')}>Select Male</Button> }
+            {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button>}
+            {male === 'MALE' ? <Button type="primary" onClick={() => setMale('FEMALE')}>Select Female</Button> : <Button type="danger" onClick={() => setMale('MALE')}>Select Male</Button>}
           </ButtonsTop>
 
-          <ul>
+          <PetList>
+            {Object.keys(pets).length
+              ? (pets.map((pet) => (
+                <Card key={pet.id}>
+                  <CardHeader>
+                    <CardImage src={goodboy} />
+                    <CardMiddle>
+                      <PetName>
+                        {pet.name}
+                      </PetName>
+                    </CardMiddle>
+                    <PetPrice>
+                      R$
+                      {pet.price}
+                    </PetPrice>
+                  </CardHeader>
+
+
+                  <CardBottom>
+                    <PetSubitem>{`Age: ${pet.age_key}`}</PetSubitem>
+                    <PetSubitem>{`Sex: ${pet.sex_key}`}</PetSubitem>
+                    <PetSubitem>{`Size: ${pet.size_key}`}</PetSubitem>
+                  </CardBottom>
+                </Card>
+
+
+              ))) : (
+                <li style={{ marginTop: '16px' }}>Sem resultados</li>
+              )}
+
+          </PetList>
+
+
+          {/* <ul>
             {Object.keys(pets).length
               ? (pets.map((pet) => (
                 <li key={pet.id}>
@@ -138,7 +173,7 @@ export default function Pets({ history, petlist }: Props) {
               ))) : (
                 <li style={{ marginTop: '16px' }}>Sem resultados</li>
               )}
-          </ul>
+          </ul> */}
 
           <ControlPagination
             pageBeforeLast={numberOfPages === page}

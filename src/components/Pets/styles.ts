@@ -5,12 +5,10 @@ import {
 } from 'antd/es';
 
 
-const {
-  Content, Footer, Sider, Header,
-} = Layout;
+const { Content, Footer, Sider } = Layout;
 
 export const CustomContent = styled(Content)`
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   align-items: center;
   
@@ -53,7 +51,6 @@ export const CustomButton = styled(Button)`
 export const CustomMenu = styled(Menu)`
   background: rgb(206, 63, 113) !important;
   width: 250px !important;
-
 `;
 
 export const MenuItem = styled(Menu.Item)``;
@@ -76,21 +73,76 @@ export const Loading = styled.img<{loading: string}>`
   }
 `;
 
-export const PetCard = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  
-  width: 800px;
+// Pet Card
+export const PetList = styled.div`
+  max-width: 900px !important;
+  display: grid !important;
+  grid-gap: 1rem !important;
 
-  min-height: 10px;
-  padding: 16px;
-  border: 1px solid rgb(206, 63, 113, 0.4);
-  margin: 8px 8px;
+  @media (min-width: 200px) {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  @media (min-width: 1000px) {
+    grid-template-columns: repeat(2, 1fr)!important;
+  }
+
 `;
 
-export const PetItem = styled.h3`
-  font-size: 10px;
+export const Card = styled.div`
+  border: 1px solid #e3e3e3;
+  border-radius: 9px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+  margin: 16px 16px;
+  width: 400px;
+  height: 180px;
+  padding: 16px 0;
+`;
 
+export const CardHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0 32px;
+`;
+
+export const CardImage = styled.img`
+  height: 60px;
+  border-radius: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+`;
+
+export const CardMiddle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+export const PetName = styled.h3`
+  font-weight: 700;
+  color: #303030;
+  margin-bottom: 16px;
+  color: rgb(206, 63, 113);
+  font-weight: bold;
+`;
+
+export const CardBottom = styled.div`
+  display: flex;
+  justify-content: space-around;
+  font-size: 14px;
+  margin-top: 16px;
+`;
+
+export const PetPrice = styled.h3`
+ color: #989898;
+  margin-bottom: 16px;
+`;
+export const PetSubitem = styled.h4`
+display: flex;
+  justify-content: center;
+  margin: 8px 0;
 `;
