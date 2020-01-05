@@ -45,6 +45,7 @@ module.exports = {
     'eslint-quote-props': 'off',
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
+    'eslint-no-unused-expressions': 'off',
   },
   settings: {
     'import/parsers': {

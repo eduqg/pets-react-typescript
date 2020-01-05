@@ -8,6 +8,10 @@ import {
 const { Content, Footer, Sider } = Layout;
 
 export const CustomContent = styled(Content)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
   margin: 24px 16px 0 !important;
   padding: 24;
   background: #fff; 
@@ -19,10 +23,11 @@ export const CustomFooter = styled(Footer)``;
 
 export const CustomSider = styled(Sider)`
   overflow: auto;
-  height: 100vh;
+  height: 150vh;
   position: fixed;
   left: 0;
   background: rgb(206, 63, 113) !important;
+  min-width: 250px !important;
 
 `;
 
@@ -42,8 +47,8 @@ export const MenuItem = styled(Menu.Item)``;
 export const CustomInput = styled(Input)``;
 
 export const Loading = styled.img<{loading: string}>`
-  height: 100px;
-  border-radius: 50px;
+  height: 50px;
+  border-radius: 25px;
   margin: 16px 0;
 
   animation: rotating 2s linear ${(p) => p.loading};
@@ -55,4 +60,23 @@ export const Loading = styled.img<{loading: string}>`
       transform: rotate(360deg);
     }
   }
+`;
+
+export const PetCard = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  
+  width: 800px;
+
+  min-height: 10px;
+  padding: 16px;
+  border: 1px solid rgb(206, 63, 113, 0.4);
+  margin: 8px 8px;
+`;
+
+export const PetItem = styled.h3`
+  font-size: 10px;
+
 `;
