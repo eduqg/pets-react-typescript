@@ -16,8 +16,8 @@ export default function ControlePagination({
 }: OwnProps) {
   return (
     <ControlPages
-      grayStart={page === 1 ? '#999' : '#df4658'}
-      grayEnd={pageBeforeLast ? '#999' : '#df4658'}
+      grayStart={page === 1 ? '#999' : 'rgb(206, 63, 113)'}
+      grayEnd={pageBeforeLast ? '#999' : 'rgb(206, 63, 113)'}
     >
       <button
         type="button"

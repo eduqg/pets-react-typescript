@@ -64,7 +64,7 @@ export default function Login({ history }: RouteComponentProps) {
         <ContentCenter>
           <Loading src={logo} loading={loading ? 'infinite' : '0'} />
 
-          <CustomInput type="email" value="joaoantonio@adopets.com" disabled />
+          <CustomInput type="email" value="usuario-test@adopets.com" disabled />
           <CustomInput type="password" value="********" disabled />
 
           <CustomButton type="primary" onClick={login}>Login</CustomButton>

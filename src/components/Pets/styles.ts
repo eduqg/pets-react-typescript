@@ -5,7 +5,9 @@ import {
 } from 'antd/es';
 
 
-const { Content, Footer, Sider } = Layout;
+const {
+  Content, Footer, Sider, Header,
+} = Layout;
 
 export const CustomContent = styled(Content)`
   display: flex;
@@ -21,14 +23,24 @@ export const CustomContent = styled(Content)`
 
 export const CustomFooter = styled(Footer)``;
 
-export const CustomSider = styled(Sider)`
-  overflow: auto;
-  height: 150vh;
-  position: fixed;
-  left: 0;
-  background: rgb(206, 63, 113) !important;
-  min-width: 250px !important;
+export const SiderImage = styled.img`
+  height: 80px;
+  border-radius: 40px;
+  align-self: center;
+  margin-left: 54px;
+  margin-top: 32px;
+`;
 
+export const CustomSider = styled(Sider)`
+  background: rgb(206, 63, 113) !important;
+`;
+
+export const ButtonsTop = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 export const CustomButton = styled(Button)`
@@ -40,6 +52,8 @@ export const CustomButton = styled(Button)`
 
 export const CustomMenu = styled(Menu)`
   background: rgb(206, 63, 113) !important;
+  width: 250px !important;
+
 `;
 
 export const MenuItem = styled(Menu.Item)``;

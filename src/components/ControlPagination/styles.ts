@@ -7,6 +7,7 @@ export const ControlPages = styled.div<{grayStart: string, grayEnd: string}>`
   height: 30px;
   justify-content: center;
   margin-top: 16px;
+  margin-bottom: 32px;
 
   button {
     display: flex;
