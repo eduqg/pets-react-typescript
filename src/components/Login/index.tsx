@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-
 
 import api from '../../services/api';
 
-interface IProps {}
+import logo from '../../assets/pet.png';
+import {
+  CustomContent, CustomFooter, CustomLayout, ContentCenter, CustomButton, CustomInput, Loading,
+} from './styles';
 
-type Props = IProps & RouteComponentProps;
-
-
-export default function Login({ history }: Props) {
+export default function Login({ history }: RouteComponentProps) {
   const [loading, setLoading] = useState(false);
-
-  const [allowEnter, setAllowEnter] = useState(false);
+  const [logged, setLogged] = useState(false);
 
   async function login() {
     setLoading(true);
@@ -39,7 +37,7 @@ export default function Login({ history }: Props) {
         if (sessionResponse.data.data.access_key) {
           localStorage.setItem('userTokenAdopets', sessionResponse.data.data.access_key);
           console.log(sessionResponse.data.data.access_key);
-          setAllowEnter(true);
+          setLogged(true);
         } else {
           console.log('Error getting user token', sessionResponse);
         }
@@ -52,31 +50,26 @@ export default function Login({ history }: Props) {
     setLoading(false);
   }
 
-  function enter() {
-    history.push('/pets');
-  }
+
+  useEffect(() => {
+    if (logged === true) {
+      history.push('/pets');
+    }
+  }, [history, logged]);
 
   return (
-    <div style={{ background: 'lightyellow' }}>
-      <h1>Login</h1>
-      {loading && (
-        <h3>Loading...</h3>
-      )}
-      {allowEnter
-        ? (
-          <>
-            Logado!
-            <button type="button" onClick={enter}>Enter</button>
-          </>
+    <CustomLayout style={{ minHeight: '100vh', background: 'rgb(206, 63, 113)' }}>
+      <CustomContent>
+        <ContentCenter>
 
-        )
-        : (
-          <>
-            Clique em login para iniciar!
-            <button type="button" onClick={login}>Login</button>
-          </>
-        )}
+          <Loading src={logo} loading={loading ? 'infinite' : '0'} />
 
-    </div>
+          <CustomInput type="email" value="joaoantonio@adopets.com" disabled />
+          <CustomInput type="password" value="********" disabled />
+          <CustomButton type="primary" onClick={login}>Login</CustomButton>
+        </ContentCenter>
+      </CustomContent>
+      <CustomFooter>Ant Design ©2018 Created by Ant UED</CustomFooter>
+    </CustomLayout>
   );
 }
