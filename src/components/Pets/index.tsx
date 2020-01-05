@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
+import {
+  Button, Layout, Menu, Icon,
+} from 'antd/es';
+
 import api from '../../services/api';
 
-interface IProps {}
+const {
+  Header, Content, Footer, Sider,
+} = Layout;
 
 interface IPet {
   name: string,
@@ -14,7 +20,7 @@ interface IPetArray {
   petlist: IPet[]
 }
 
-type Props = IProps & RouteComponentProps & IPetArray;
+type Props = RouteComponentProps & IPetArray;
 
 
 export default function Pets({ history, petlist }: Props) {
@@ -30,39 +36,39 @@ export default function Pets({ history, petlist }: Props) {
 
 
   useEffect(() => {
-    async function loadInitialPets() {
-      setLoading(true);
-      try {
-        const loggedToken = localStorage.getItem('userTokenAdopets');
+    // async function loadInitialPets() {
+    //   setLoading(true);
+    //   try {
+    //     const loggedToken = localStorage.getItem('userTokenAdopets');
 
-        if (loggedToken) {
-          const response = await api.post('v1/pet/search', {
-            search: {
-              sex_key: 'MALE',
-              size_key: 'S',
-              age_key: 'ADULT',
-            },
-            options: {
-              sort: ['-name'],
-            },
-          }, {
-            headers: {
-              Authorization: `${loggedToken}`,
-            },
-          });
+    //     if (loggedToken) {
+    //       const response = await api.post('v1/pet/search', {
+    //         search: {
+    //           sex_key: 'MALE',
+    //           size_key: 'S',
+    //           age_key: 'ADULT',
+    //         },
+    //         options: {
+    //           sort: ['-name'],
+    //         },
+    //       }, {
+    //         headers: {
+    //           Authorization: `${loggedToken}`,
+    //         },
+    //       });
 
-          console.log(response.data.data);
-          setPets(response.data.data.result);
-        } else {
-          console.log('Token not provided');
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    loadInitialPets();
+    //       console.log(response.data.data);
+    //       setPets(response.data.data.result);
+    //     } else {
+    //       console.log('Token not provided');
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // loadInitialPets();
 
-    setLoading(false);
+    // setLoading(false);
   }, []); // eslint-disable-line
 
   useEffect(() => {
@@ -102,25 +108,72 @@ export default function Pets({ history, petlist }: Props) {
     setLoading(false);
   }, [sort]); // eslint-disable-line
 
-  function verDados() {
-    console.log(pets);
-  }
-
-
   return (
-    <div style={{ background: 'lightblue' }}>
-      <h1>All pets page</h1>
-      {loading && <h4>Loading</h4>}
-      <button type="button" onClick={verDados}>Ver Pets</button>
-      <button type="button" onClick={() => setSort(!sort)}>Mudar Ordem</button>
-      <ul>
-        {pets
-          ? (pets.map((pet) => (
-            <li key={pet.id}>{pet.name}</li>
-          ))) : (
-            <h4>Sem resultados</h4>
-          )}
-      </ul>
-    </div>
+    <Layout>
+      <Sider
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+        }}
+      >
+        <div className="logo" />
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+          <Menu.Item key="1">
+            <Icon type="user" />
+            <span className="nav-text">nav 1</span>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Icon type="video-camera" />
+            <span className="nav-text">nav 2</span>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Icon type="upload" />
+            <span className="nav-text">nav 3</span>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Icon type="bar-chart" />
+            <span className="nav-text">nav 4</span>
+          </Menu.Item>
+          <Menu.Item key="5">
+            <Icon type="cloud-o" />
+            <span className="nav-text">nav 5</span>
+          </Menu.Item>
+          <Menu.Item key="6">
+            <Icon type="appstore-o" />
+            <span className="nav-text">nav 6</span>
+          </Menu.Item>
+          <Menu.Item key="7">
+            <Icon type="team" />
+            <span className="nav-text">nav 7</span>
+          </Menu.Item>
+          <Menu.Item key="8">
+            <Icon type="shop" />
+            <span className="nav-text">nav 8</span>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+      <Layout style={{ marginLeft: 200, minHeight: '100vh' }}>
+        <Header style={{ background: '#fff', padding: 0 }} />
+        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+          <div style={{
+            padding: 24, background: '#fff', textAlign: 'center', minHeight: '80vh',
+          }}
+          >
+            <ul>
+              {pets
+                ? (pets.map((pet) => (
+                  <li key={pet.id}>{pet.name}</li>
+                ))) : (
+                  <h4>Sem resultados</h4>
+                )}
+            </ul>
+            <Button type="primary">Button</Button>
+          </div>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+      </Layout>
+    </Layout>
   );
 }

@@ -7,10 +7,13 @@ import store from './store';
 import Routes from './routes';
 import history from './services/history';
 
+import GlobalStyle from './styles/global';
+
 const App: React.FC = () => (
   <Provider store={store}>
     <Router history={history}>
       <Routes />
+      <GlobalStyle />
     </Router>
   </Provider>
 );

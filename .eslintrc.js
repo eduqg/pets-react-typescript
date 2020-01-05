@@ -29,10 +29,22 @@ module.exports = {
         extensions: ['.tsx'],
       },
     ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        'js': 'never',
+        'jsx': 'never',
+        'ts': 'never',
+        'tsx': 'never'
+      }
+    ],
     'import/prefer-default-export': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-member-accessibility': 'off',
-    'eslint-quote-props': 'off'
+    'eslint-quote-props': 'off',
+    '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/interface-name-prefix': 'off',
   },
   settings: {
     'import/parsers': {
