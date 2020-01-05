@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-
 import {
   Layout, Icon, Dropdown, Button, Menu,
 } from 'antd/es';
+
+import ControlPagination from '../ControlPagination';
+
 import logo from '../../assets/pet.png';
 import {
   CustomContent, CustomSider, CustomFooter, CustomMenu, MenuItem, Loading, PetCard, PetItem,
@@ -29,10 +31,14 @@ type Props = RouteComponentProps & IPetArray;
 
 export default function Pets({ history, petlist }: Props) {
   const [loading, setLoading] = useState(false);
-  const [pets, setPets] = useState(petlist);
+  const [pets, setPets] = useState(petlist || []);
 
   const [sort, setSort] = useState('name');
   const [male, setMale] = useState('MALE');
+
+  const [nextPageCount, setNextPageCount] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     console.log(pets);
@@ -49,11 +55,11 @@ export default function Pets({ history, petlist }: Props) {
             search: {
               sex_key: male,
               size_key: ['S', 'M', 'L', 'XL'],
-              age_key: ['BABY', 'YOUNG', 'ADULT', 'SENIOR'],
+              age_key: ['ADULT', 'SENIOR'],
             },
             options: {
               sort: [sort],
-              page: 1,
+              page,
             },
           }, {
             headers: {
@@ -63,6 +69,7 @@ export default function Pets({ history, petlist }: Props) {
 
           console.log(response.data.data);
           setPets(response.data.data.result);
+          setNumberOfPages(response.data.data.pages);
         } else {
           console.log('Token not provided');
         }
@@ -73,12 +80,34 @@ export default function Pets({ history, petlist }: Props) {
     }
     loadInitialPets();
 
-  }, [male, sort]); // eslint-disable-line
+  }, [male, sort, page]); // eslint-disable-line
+
+  function handleChangePage(newPage: number) {
+    // Page backwards
+    if (newPage < page && newPage > 0) {
+      console.log('Voltar');
+      setPage(newPage);
+    }
+
+    // Page forward
+    if (newPage > page && page < numberOfPages) {
+      console.log('avancar');
+      setPage(newPage);
+    }
+  }
 
   return (
     <Layout>
       <CustomSider>
         <div className="logo" />
+        <h3>
+          NumberOfPages:
+          {numberOfPages}
+        </h3>
+        <h3>
+          Page:
+          {page}
+        </h3>
         <CustomMenu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
           <MenuItem key="1">
             <Icon type="user" />
@@ -101,21 +130,30 @@ export default function Pets({ history, petlist }: Props) {
               {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button> }
               {male === 'MALE' ? <Button type="primary" onClick={() => setMale('FEMALE')}>Select Female</Button> : <Button type="danger" onClick={() => setMale('MALE')}>Select Male</Button> }
             </li>
-            {pets
-               && (pets.map((pet) => (
-                 <li key={pet.id}>
-                   <PetCard>
-                     <PetItem>{pet.name}</PetItem>
-                     <PetItem>{pet.sex_key}</PetItem>
-                     <PetItem>{pet.age_key}</PetItem>
-                     <PetItem>{pet.size_key}</PetItem>
-                     <PetItem>{pet.price}</PetItem>
-                   </PetCard>
+
+            {Object.keys(pets).length
+              ? (pets.map((pet) => (
+                <li key={pet.id}>
+                  <PetCard>
+                    <PetItem>{pet.name}</PetItem>
+                    <PetItem>{pet.sex_key}</PetItem>
+                    <PetItem>{pet.age_key}</PetItem>
+                    <PetItem>{pet.size_key}</PetItem>
+                    <PetItem>{pet.price}</PetItem>
+                  </PetCard>
 
 
-                 </li>
-               )))}
+                </li>
+              ))) : (
+                <li>Sem resultados</li>
+              )}
           </ul>
+
+          <ControlPagination
+            pageBeforeLast={numberOfPages === page}
+            page={page}
+            handleChangePage={handleChangePage}
+          />
 
 
         </CustomContent>
