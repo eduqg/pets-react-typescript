@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import {
-  Layout, Button, Menu, Checkbox, Radio,
+  Layout, Button, Menu, Radio,
 } from 'antd/es';
 
 import ControlPagination from '../ControlPagination';
@@ -30,21 +30,14 @@ interface IPetArray {
 
 type Props = RouteComponentProps & IPetArray;
 
-const ageOptions = [
-  { label: 'Baby', value: 'BABY', disabled: true },
-  { label: 'Young', value: 'YOUNG' },
-  { label: 'Adult', value: 'ADULT' },
-  { label: 'Senior', value: 'SENIOR', disabled: true },
-];
-
 export default function Pets({ history, petlist }: Props) {
   const [loading, setLoading] = useState(false);
   const [pets, setPets] = useState(petlist || []);
 
   const [sort, setSort] = useState('name');
   const [male, setMale] = useState('MALE');
-  const [ages, setAges] = useState(['YOUNG', 'ADULT']);
-  const [size, setSize] = useState('S');
+  const [age, setAge] = useState('ADULT');
+  const [size, setSize] = useState('XL');
 
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [page, setPage] = useState(1);
@@ -63,7 +56,7 @@ export default function Pets({ history, petlist }: Props) {
             search: {
               sex_key: male,
               size_key: size,
-              age_key: ages,
+              age_key: age,
             },
             options: {
               sort: [sort],
@@ -75,7 +68,7 @@ export default function Pets({ history, petlist }: Props) {
             },
           });
 
-          console.log(response.data.data);
+          console.log({ Pages: response.data.data.pages, Count: response.data.data.count });
           setPets(response.data.data.result);
           setNumberOfPages(response.data.data.pages);
         } else {
@@ -89,7 +82,7 @@ export default function Pets({ history, petlist }: Props) {
     }
     loadInitialPets();
 
-  }, [male, sort, ages, size, page]); // eslint-disable-line
+  }, [male, sort, age, size, page]); // eslint-disable-line
 
   /**
    * Pagination page control
@@ -106,21 +99,8 @@ export default function Pets({ history, petlist }: Props) {
     }
   }
 
-  /**
-   * Checkbox control
-   */
-  function onChangePetAge(checkedValues: any) {
-    // API only accepts string instead array of strings if there is only one value checked
-    if (checkedValues.length === 1) {
-      setAges(checkedValues[0]);
-    } else {
-      setAges(checkedValues);
-    }
-  }
-
   return (
     <Layout>
-
       <CustomSider>
         <div className="logo" />
         <SiderImage src={logo} alt="logo" />
@@ -141,22 +121,32 @@ export default function Pets({ history, petlist }: Props) {
 
           <ButtonsTop>
             {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button>}
-            {male === 'MALE' ? <Button type="primary" onClick={() => setMale('FEMALE')}>Select Female</Button> : <Button type="danger" onClick={() => setMale('MALE')}>Select Male</Button>}
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="S" onChange={(e) => setSize(e.target.value)} buttonStyle="solid">
+            <Radio.Group defaultValue="MALE" onChange={(e) => { console.log(e.target.value); setMale(e.target.value); }} buttonStyle="solid">
+              <Radio.Button value="MALE">Male</Radio.Button>
+              <Radio.Button value="FEMALE">Female</Radio.Button>
+            </Radio.Group>
+          </ButtonsTop>
+
+          <ButtonsTop>
+            <Radio.Group defaultValue="XL" onChange={(e) => { console.log(e.target.value); setSize(e.target.value); }} buttonStyle="solid">
               <Radio.Button value="S">S</Radio.Button>
               <Radio.Button value="M">M</Radio.Button>
               <Radio.Button value="L">L</Radio.Button>
               <Radio.Button value="XL">XL</Radio.Button>
               <Radio.Button value="XS">XS</Radio.Button>
-              <Radio.Button value={['S', 'M']}>ALL</Radio.Button>
             </Radio.Group>
           </ButtonsTop>
 
           <ButtonsTop>
-            <Checkbox.Group options={ageOptions} defaultValue={['YOUNG', 'ADULT']} onChange={(e) => onChangePetAge(e)} />
+            <Radio.Group defaultValue="ADULT" onChange={(e) => { console.log(e.target.value); setAge(e.target.value); }} buttonStyle="solid">
+              <Radio.Button value="BABY">BABY</Radio.Button>
+              <Radio.Button value="YOUNG">YOUNG</Radio.Button>
+              <Radio.Button value="ADULT">ADULT</Radio.Button>
+              <Radio.Button value="SENIOR">SENIOR</Radio.Button>
+            </Radio.Group>
           </ButtonsTop>
 
           <PetList>
