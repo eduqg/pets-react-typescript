@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import {
-  Layout, Button, Menu,
+  Layout, Button, Menu, Checkbox,
 } from 'antd/es';
 
 import ControlPagination from '../ControlPagination';
@@ -30,6 +30,12 @@ interface IPetArray {
 
 type Props = RouteComponentProps & IPetArray;
 
+const ageOptions = [
+  { label: 'Baby', value: 'BABY', disabled: true },
+  { label: 'Young', value: 'YOUNG' },
+  { label: 'Adult', value: 'ADULT' },
+  { label: 'Senior', value: 'SENIOR', disabled: true },
+];
 
 export default function Pets({ history, petlist }: Props) {
   const [loading, setLoading] = useState(false);
@@ -37,6 +43,7 @@ export default function Pets({ history, petlist }: Props) {
 
   const [sort, setSort] = useState('name');
   const [male, setMale] = useState('MALE');
+  const [ages, setAges] = useState(['YOUNG', 'ADULT']);
 
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [page, setPage] = useState(1);
@@ -55,7 +62,7 @@ export default function Pets({ history, petlist }: Props) {
             search: {
               sex_key: male,
               size_key: ['S', 'M', 'L', 'XL'],
-              age_key: ['ADULT', 'SENIOR'],
+              age_key: ages,
             },
             options: {
               sort: [sort],
@@ -81,7 +88,7 @@ export default function Pets({ history, petlist }: Props) {
     }
     loadInitialPets();
 
-  }, [male, sort, page]); // eslint-disable-line
+  }, [male, sort,ages, page]); // eslint-disable-line
 
   /**
    * Pagination page control
@@ -97,6 +104,21 @@ export default function Pets({ history, petlist }: Props) {
       setPage(newPage);
     }
   }
+
+  /**
+   * Checkbox control
+   */
+  function onChangePetAge(checkedValues: any) {
+    // API only accepts string instead array of strings if there is only one value checked
+    if (checkedValues.length === 1) {
+      console.log(checkedValues[0]);
+      setAges(checkedValues[0]);
+    } else {
+      console.log('checked = ', checkedValues);
+      setAges(checkedValues);
+    }
+  }
+
 
   return (
     <Layout>
@@ -122,6 +144,10 @@ export default function Pets({ history, petlist }: Props) {
           <ButtonsTop>
             {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button>}
             {male === 'MALE' ? <Button type="primary" onClick={() => setMale('FEMALE')}>Select Female</Button> : <Button type="danger" onClick={() => setMale('MALE')}>Select Male</Button>}
+          </ButtonsTop>
+
+          <ButtonsTop>
+            <Checkbox.Group options={ageOptions} defaultValue={['YOUNG', 'ADULT']} onChange={(e) => onChangePetAge(e)} />
           </ButtonsTop>
 
           <PetList>

@@ -41,6 +41,8 @@ export const ButtonsTop = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+
+  margin-top: 16px;
 `;
 
 export const CustomButton = styled(Button)`
