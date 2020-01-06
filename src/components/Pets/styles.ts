@@ -19,7 +19,9 @@ export const CustomContent = styled(Content)`
   min-height: 80vh;
 `;
 
-export const CustomFooter = styled(Footer)``;
+export const CustomFooter = styled(Footer)`
+ text-align: center; 
+`;
 
 export const SiderImage = styled.img`
   height: 80px;

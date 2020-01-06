@@ -156,35 +156,14 @@ export default function Pets({ history, petlist }: Props) {
 
           </PetList>
 
-
-          {/* <ul>
-            {Object.keys(pets).length
-              ? (pets.map((pet) => (
-                <li key={pet.id}>
-                  <PetCard>
-                    <PetItem>{pet.name}</PetItem>
-                    <PetItem>{pet.sex_key}</PetItem>
-                    <PetItem>{pet.age_key}</PetItem>
-                    <PetItem>{pet.size_key}</PetItem>
-                    <PetItem>{pet.price}</PetItem>
-                  </PetCard>
-
-
-                </li>
-              ))) : (
-                <li style={{ marginTop: '16px' }}>Sem resultados</li>
-              )}
-          </ul> */}
-
           <ControlPagination
             pageBeforeLast={numberOfPages === page}
             page={page}
             handleChangePage={handleChangePage}
           />
 
-
         </CustomContent>
-        <CustomFooter style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</CustomFooter>
+        <CustomFooter>Ant Design ©2018 Created by Ant UED</CustomFooter>
       </Layout>
     </Layout>
   );
