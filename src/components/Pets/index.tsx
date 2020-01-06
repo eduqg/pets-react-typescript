@@ -35,12 +35,13 @@ export default function Pets({ history, petlist }: Props) {
   const [pets, setPets] = useState(petlist || []);
 
   const [sort, setSort] = useState('name');
-  const [male, setMale] = useState('MALE');
   const [age, setAge] = useState('ADULT');
   const [size, setSize] = useState('XL');
 
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [page, setPage] = useState(1);
+
+  const [search, setSearch] = useState({});
 
   /**
    * Load and filter pets
@@ -53,11 +54,7 @@ export default function Pets({ history, petlist }: Props) {
 
         if (loggedToken) {
           const response = await api.post('v1/pet/search', {
-            search: {
-              sex_key: male,
-              size_key: size,
-              age_key: age,
-            },
+            search,
             options: {
               sort: [sort],
               page,
@@ -82,7 +79,7 @@ export default function Pets({ history, petlist }: Props) {
     }
     loadInitialPets();
 
-  }, [male, sort, age, size, page]); // eslint-disable-line
+  }, [search, sort, page]); // eslint-disable-line
 
   /**
    * Pagination page control
@@ -119,19 +116,21 @@ export default function Pets({ history, petlist }: Props) {
         <CustomContent>
           <Loading src={logo} loading={loading ? 'infinite' : '0'} />
 
+          <Button type="primary" onClick={() => setSearch({})}>Load All</Button>
+
           <ButtonsTop>
-            {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button>}
+            {sort === 'name' ? <Button type="default" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="primary" onClick={() => setSort('name')}>Name Ascending</Button>}
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="MALE" onChange={(e) => { console.log(e.target.value); setMale(e.target.value); }} buttonStyle="solid">
+            <Radio.Group defaultValue="" onChange={(e) => { console.log(e.target.value); setSearch({ ...search, sex_key: e.target.value }); }} buttonStyle="solid">
               <Radio.Button value="MALE">Male</Radio.Button>
               <Radio.Button value="FEMALE">Female</Radio.Button>
             </Radio.Group>
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="XL" onChange={(e) => { console.log(e.target.value); setSize(e.target.value); }} buttonStyle="solid">
+            <Radio.Group defaultValue="" onChange={(e) => { console.log(e.target.value); setSearch({ ...search, size_key: e.target.value }); }} buttonStyle="solid">
               <Radio.Button value="S">S</Radio.Button>
               <Radio.Button value="M">M</Radio.Button>
               <Radio.Button value="L">L</Radio.Button>
@@ -141,7 +140,7 @@ export default function Pets({ history, petlist }: Props) {
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="ADULT" onChange={(e) => { console.log(e.target.value); setAge(e.target.value); }} buttonStyle="solid">
+            <Radio.Group defaultValue="" onChange={(e) => { console.log(e.target.value); setSearch({ ...search, age_key: e.target.value }); }} buttonStyle="solid">
               <Radio.Button value="BABY">BABY</Radio.Button>
               <Radio.Button value="YOUNG">YOUNG</Radio.Button>
               <Radio.Button value="ADULT">ADULT</Radio.Button>
