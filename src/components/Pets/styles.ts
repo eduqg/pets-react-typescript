@@ -4,7 +4,6 @@ import {
   Button, Layout, Menu, Input,
 } from 'antd/es';
 
-
 const { Content, Footer, Sider } = Layout;
 
 export const CustomContent = styled(Content)`
@@ -150,3 +149,16 @@ display: flex;
   justify-content: center;
   margin: 8px 0;
 `;
+
+// export const RadioButton = styled(Radio.Button)<{selected: boolean}>`
+//   &.ant-radio-button-wrapper {
+//     background: #fff !important;
+//     border: 1px solid #d9d9d9 !important;
+//     color: rgba(0, 0, 0, 0.65);
+//   }
+
+//   &.ant-radio-button-wrapper-checked {
+//     background: rgb(206, 63, 113, 0.7) !important;
+//     border-color: rgb(206, 63, 113) !important;
+//   }
+// `;

@@ -33,14 +33,9 @@ type Props = RouteComponentProps & IPetArray;
 export default function Pets({ history, petlist }: Props) {
   const [loading, setLoading] = useState(false);
   const [pets, setPets] = useState(petlist || []);
-
   const [sort, setSort] = useState('name');
-  const [age, setAge] = useState('ADULT');
-  const [size, setSize] = useState('XL');
-
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [page, setPage] = useState(1);
-
   const [search, setSearch] = useState({});
 
   /**
@@ -91,10 +86,17 @@ export default function Pets({ history, petlist }: Props) {
     }
 
     // Page forward
-    if (newPage > page && page <= numberOfPages) {
+    if (newPage > page && page < numberOfPages) {
       setPage(newPage);
     }
   }
+
+  // Prevents empty results after update search in page above 1
+  useEffect(() => {
+    if (Object.keys(pets).length === 0 && page >= numberOfPages) {
+      setPage(1);
+    }
+  }, [pets]); // eslint-disable-line 
 
   return (
     <Layout>
@@ -116,21 +118,23 @@ export default function Pets({ history, petlist }: Props) {
         <CustomContent>
           <Loading src={logo} loading={loading ? 'infinite' : '0'} />
 
-          <Button type="primary" onClick={() => setSearch({})}>Load All</Button>
+          <ButtonsTop>
+            <Button type="primary" onClick={() => setSearch({})}>Load All</Button>
+          </ButtonsTop>
 
           <ButtonsTop>
             {sort === 'name' ? <Button type="default" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="primary" onClick={() => setSort('name')}>Name Ascending</Button>}
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="" onChange={(e) => { console.log(e.target.value); setSearch({ ...search, sex_key: e.target.value }); }} buttonStyle="solid">
+            <Radio.Group defaultValue="" onChange={(e) => setSearch({ ...search, sex_key: e.target.value })} buttonStyle="solid">
               <Radio.Button value="MALE">Male</Radio.Button>
               <Radio.Button value="FEMALE">Female</Radio.Button>
             </Radio.Group>
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="" onChange={(e) => { console.log(e.target.value); setSearch({ ...search, size_key: e.target.value }); }} buttonStyle="solid">
+            <Radio.Group defaultValue="" onChange={(e) => setSearch({ ...search, size_key: e.target.value })} buttonStyle="solid">
               <Radio.Button value="S">S</Radio.Button>
               <Radio.Button value="M">M</Radio.Button>
               <Radio.Button value="L">L</Radio.Button>
@@ -140,11 +144,11 @@ export default function Pets({ history, petlist }: Props) {
           </ButtonsTop>
 
           <ButtonsTop>
-            <Radio.Group defaultValue="" onChange={(e) => { console.log(e.target.value); setSearch({ ...search, age_key: e.target.value }); }} buttonStyle="solid">
-              <Radio.Button value="BABY">BABY</Radio.Button>
-              <Radio.Button value="YOUNG">YOUNG</Radio.Button>
-              <Radio.Button value="ADULT">ADULT</Radio.Button>
-              <Radio.Button value="SENIOR">SENIOR</Radio.Button>
+            <Radio.Group defaultValue="" onChange={(e) => setSearch({ ...search, age_key: e.target.value })} buttonStyle="solid">
+              <Radio.Button value="BABY">Baby</Radio.Button>
+              <Radio.Button value="YOUNG">Young</Radio.Button>
+              <Radio.Button value="ADULT">Adult</Radio.Button>
+              <Radio.Button value="SENIOR">Senior</Radio.Button>
             </Radio.Group>
           </ButtonsTop>
 
@@ -173,7 +177,11 @@ export default function Pets({ history, petlist }: Props) {
                   </CardBottom>
                 </Card>
               ))) : (
-                <li style={{ marginTop: '16px' }}>Sem resultados</li>
+                <CardMiddle style={{ marginTop: '16px' }}>
+                  <PetName>
+                      There are no pets in this category.
+                  </PetName>
+                </CardMiddle>
               )}
 
           </PetList>
