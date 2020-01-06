@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import {
-  Layout, Button, Menu, Checkbox,
+  Layout, Button, Menu, Checkbox, Radio,
 } from 'antd/es';
 
 import ControlPagination from '../ControlPagination';
@@ -44,6 +44,7 @@ export default function Pets({ history, petlist }: Props) {
   const [sort, setSort] = useState('name');
   const [male, setMale] = useState('MALE');
   const [ages, setAges] = useState(['YOUNG', 'ADULT']);
+  const [size, setSize] = useState('S');
 
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [page, setPage] = useState(1);
@@ -61,7 +62,7 @@ export default function Pets({ history, petlist }: Props) {
           const response = await api.post('v1/pet/search', {
             search: {
               sex_key: male,
-              size_key: ['S', 'M', 'L', 'XL'],
+              size_key: size,
               age_key: ages,
             },
             options: {
@@ -88,7 +89,7 @@ export default function Pets({ history, petlist }: Props) {
     }
     loadInitialPets();
 
-  }, [male, sort,ages, page]); // eslint-disable-line
+  }, [male, sort, ages, size, page]); // eslint-disable-line
 
   /**
    * Pagination page control
@@ -100,7 +101,7 @@ export default function Pets({ history, petlist }: Props) {
     }
 
     // Page forward
-    if (newPage > page && page < numberOfPages) {
+    if (newPage > page && page <= numberOfPages) {
       setPage(newPage);
     }
   }
@@ -111,14 +112,11 @@ export default function Pets({ history, petlist }: Props) {
   function onChangePetAge(checkedValues: any) {
     // API only accepts string instead array of strings if there is only one value checked
     if (checkedValues.length === 1) {
-      console.log(checkedValues[0]);
       setAges(checkedValues[0]);
     } else {
-      console.log('checked = ', checkedValues);
       setAges(checkedValues);
     }
   }
-
 
   return (
     <Layout>
@@ -144,6 +142,17 @@ export default function Pets({ history, petlist }: Props) {
           <ButtonsTop>
             {sort === 'name' ? <Button type="primary" onClick={() => setSort('-name')}>Name Descending</Button> : <Button type="danger" onClick={() => setSort('name')}>Name Ascending</Button>}
             {male === 'MALE' ? <Button type="primary" onClick={() => setMale('FEMALE')}>Select Female</Button> : <Button type="danger" onClick={() => setMale('MALE')}>Select Male</Button>}
+          </ButtonsTop>
+
+          <ButtonsTop>
+            <Radio.Group defaultValue="S" onChange={(e) => setSize(e.target.value)} buttonStyle="solid">
+              <Radio.Button value="S">S</Radio.Button>
+              <Radio.Button value="M">M</Radio.Button>
+              <Radio.Button value="L">L</Radio.Button>
+              <Radio.Button value="XL">XL</Radio.Button>
+              <Radio.Button value="XS">XS</Radio.Button>
+              <Radio.Button value={['S', 'M']}>ALL</Radio.Button>
+            </Radio.Group>
           </ButtonsTop>
 
           <ButtonsTop>
@@ -174,8 +183,6 @@ export default function Pets({ history, petlist }: Props) {
                     <PetSubitem>{`Size: ${pet.size_key}`}</PetSubitem>
                   </CardBottom>
                 </Card>
-
-
               ))) : (
                 <li style={{ marginTop: '16px' }}>Sem resultados</li>
               )}
@@ -183,7 +190,7 @@ export default function Pets({ history, petlist }: Props) {
           </PetList>
 
           <ControlPagination
-            pageBeforeLast={numberOfPages === page}
+            pageBeforeLast={numberOfPages === page || numberOfPages === 0}
             page={page}
             handleChangePage={handleChangePage}
           />
