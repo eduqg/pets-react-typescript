@@ -72,6 +72,7 @@ export default function Pets({ history, petlist }: Props) {
           setNumberOfPages(response.data.data.pages);
         } else {
           console.log('Token not provided');
+          history.push('/');
         }
       } catch (error) {
         console.log(error);

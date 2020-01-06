@@ -21,7 +21,6 @@ export default function Login({ history }: RouteComponentProps) {
 
       if (initialResponse.data.data.access_key) {
         const initialToken = initialResponse.data.data.access_key;
-        console.log(initialToken);
 
         const sessionResponse = await api.post('v1/auth/session-register', {
           organization_user: {
@@ -36,13 +35,12 @@ export default function Login({ history }: RouteComponentProps) {
 
         if (sessionResponse.data.data.access_key) {
           localStorage.setItem('userTokenAdopets', sessionResponse.data.data.access_key);
-          console.log(sessionResponse.data.data.access_key);
           setLogged(true);
         } else {
-          console.log('Error getting user token', sessionResponse);
+          throw new Error('Error getting user token');
         }
       } else {
-        throw new Error('Failed to get token');
+        throw new Error('Failed to get initial token');
       }
     } catch (error) {
       console.log(error);
@@ -50,12 +48,11 @@ export default function Login({ history }: RouteComponentProps) {
     setLoading(false);
   }
 
-
   useEffect(() => {
     if (logged === true) {
       history.push('/pets');
     }
-  }, [history, logged]);
+  }, [logged]); // eslint-disable-line
 
   return (
     <CustomLayout style={{ minHeight: '100vh', background: 'rgb(206, 63, 113)' }}>
